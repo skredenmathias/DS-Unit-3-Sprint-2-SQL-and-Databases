@@ -4,10 +4,9 @@ conn = sqlite3.connect('rpg_db.sqlite3')
 # 1. How many total characters?
 curs = conn.cursor()
 curs.execute('SELECT count(*) FROM charactercreator_character;')
-curs.fetchall()
+print('total characters:')
+print(curs.fetchall()[0][0])
 curs.close()
-# SELECT count(*)
-# FROM charactercreator_character;
 
 # 2. How many of each subclass?
 curs2 = conn.cursor()
@@ -66,10 +65,18 @@ curs5 = conn.cursor()
 query = '''SELECT ai.item_id
 FROM armory_item AS ai
 LEFT JOIN armory_weapon ON item_ptr_id = ai.item_id
-WHERE item_ptr_id IS NULL'''
+WHERE item_ptr_id IS NULL;'''
 curs5.execute(query)
 curs5.fetchall()
 curs5.close()
+
+# also: 
+'''SELECT COUNT(DISTINCT item_id) FROM armory_item
+WHERE item_id NOT IN (SELECT item_ptr_id FROM armory_weapon);'''
+# also:
+'''SELECT COUNT(DISTINCT item_id) - 
+COUNT(DISTINCT item_ptr_id)
+FROM armory_item, armory_weapon'''
 
 # 5 How many items per char? (first 20)
 curs6 = conn.cursor()
@@ -104,12 +111,6 @@ LIMIT 20;'''
 curs7.execute(query)
 curs7.fetchall()
 curs7.close()
-#Chris ish
-# SELECT cci.character_id, COUNT(cci.item_id)
-# FROM charactercreator_character_inventory AS cci
-# WHERE cci.item_id IN (SELECT item_ptr_id FROM armory_weapon)
-# GROUP BY cci.character_id
-# ORDER BY 2 DESC;
 
 # 7 On avg, how many items per char?
 curs8 = conn.cursor()
@@ -119,6 +120,12 @@ FROM charactercreator_character_inventory cci'''
 curs8.execute(query)
 curs8.fetchall()
 curs8.close()
+# ALSO:
+# SELECT AVG(num_items)
+# FROM
+# (SELECT character_id, COUNT(*) AS num_items
+# FROM charactercreator_character_inventory
+# GROUP BY character_id)
 
 # 8 On avg, how many weapons per char?
 curs9 = conn.cursor()
