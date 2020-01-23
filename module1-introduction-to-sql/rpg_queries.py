@@ -80,6 +80,7 @@ FROM armory_item, armory_weapon'''
 
 # 5 How many items per char? (first 20)
 curs6 = conn.cursor()
+# Works without armory_item.
 query = '''SELECT cc.character_id AS character_id, cc.name, 
 COUNT(ai.item_id) AS num_items
 FROM charactercreator_character AS cc,
@@ -93,6 +94,14 @@ LIMIT 20;'''
 curs6.execute(query)
 curs6.fetchall()
 curs6.close()
+# Also:
+'''
+SELECT character_id, COUNT(*)
+FROM charactercreator_character_inventory as cci
+GROUP BY character_id
+LIMIT 20;
+'''
+
 
 # 6 How many weapons per character? (first 20)
 curs7 = conn.cursor()

@@ -17,4 +17,22 @@ curs.close()
 
 curs = conn.cursor()
 query = '''
-SELECT COUNT(*)
+SELECT count(Nature), count(Shopping)
+FROM review
+WHERE Nature > 100 AND Shopping > 100;
+'''
+curs.execute(query)
+print('users with > 100 reviews for Nature & Shopping:')
+print(curs.fetchall()[0][0]) # ?
+curs.close()
+
+# Avg reviews per category?
+curs = conn.cursor()
+categories = df.columns[1:].tolist()
+
+for category in categories:
+    query = f'SELECT avg({category}) FROM review;'
+    curs.execute(query)
+    print(category)
+    print(round(curs.fetchall()[0][0], 2)) # ?
+curs.close()
