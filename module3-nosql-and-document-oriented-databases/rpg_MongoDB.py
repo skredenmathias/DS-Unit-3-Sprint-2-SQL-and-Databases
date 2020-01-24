@@ -1,6 +1,8 @@
 import pymongo
 # import rpg_db.sqlite3 as characters
 # Need to: create conn object like in titanic / buddymove.
+# https://github.com/LambdaSchool/Django-RPG/blob/master/testdata.json
+
 mongo_pw = 'skreden'
 ip = '46.230.129.54'
 
